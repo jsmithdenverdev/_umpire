@@ -15,14 +15,14 @@ func main() {
 
 	var (
 		commands       = map[interface{}]requestHandler{}
-		commandsReturn = map[interface{}]requestHandlerReturn{
+		commandsReturn = map[interface{}]requestReturnHandler{
 			createBookCommand{}: &createBookCommandHandler{
 				logger,
 				model,
 			},
 		}
 		queries       = map[interface{}]requestHandler{}
-		queriesReturn = map[interface{}]requestHandlerReturn{
+		queriesReturn = map[interface{}]requestReturnHandler{
 			getBookQuery{}: &getBookQueryHandler{
 				logger,
 				model,
@@ -47,13 +47,13 @@ func main() {
 	}
 
 	for command, handler := range commandsReturn {
-		if err := umpire.registerRequestHandlerReturn(command, handler); err != nil {
+		if err := umpire.registerRequestReturnHandler(command, handler); err != nil {
 			logger.Fatal(err)
 		}
 	}
 
 	for query, handler := range queriesReturn {
-		if err := umpire.registerRequestHandlerReturn(query, handler); err != nil {
+		if err := umpire.registerRequestReturnHandler(query, handler); err != nil {
 			logger.Fatal(err)
 		}
 	}

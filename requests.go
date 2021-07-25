@@ -7,7 +7,7 @@ type (
 		Handle(request interface{}, ctx context.Context) error
 	}
 
-	requestHandlerReturn interface {
+	requestReturnHandler interface {
 		Handle(request interface{}, ctx context.Context) (interface{}, error)
 	}
 )

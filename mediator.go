@@ -8,12 +8,12 @@ import (
 
 type mediator struct {
 	requestHandlers       map[string]requestHandler
-	requestHandlersReturn map[string]requestHandlerReturn
+	requestHandlersReturn map[string]requestReturnHandler
 }
 
 func newMediator() *mediator {
 	requestHandlers := make(map[string]requestHandler, 0)
-	requestHandlersReturn := make(map[string]requestHandlerReturn, 0)
+	requestHandlersReturn := make(map[string]requestReturnHandler, 0)
 
 	return &mediator{
 		requestHandlers:       requestHandlers,
@@ -37,9 +37,9 @@ func (m *mediator) registerRequestHandler(request interface{}, handler requestHa
 	return nil
 }
 
-// registerRequestHandlerReturn registers a given request with a requestHandlerReturn. A request may have a single
-// requestHandlerReturn. An error is returned if the given request has already been registered.
-func (m *mediator) registerRequestHandlerReturn(request interface{}, handler requestHandlerReturn) error {
+// registerRequestReturnHandler registers a given request with a requestReturnHandler. A request may have a single
+// requestReturnHandler. An error is returned if the given request has already been registered.
+func (m *mediator) registerRequestReturnHandler(request interface{}, handler requestReturnHandler) error {
 	requestName := reflect.TypeOf(request).Name()
 
 	if handler, ok := m.requestHandlersReturn[requestName]; ok {
@@ -66,9 +66,9 @@ func (m *mediator) dispatch(request interface{}, ctx context.Context) error {
 	return fmt.Errorf("request %s has no handlers", requestName)
 }
 
-// dispatchReturn attempts to find and execute a requestHandlerReturn for the given request returning an error if the
-// request has no registered requestHandlerReturn. dispatch will bubble the result and error from the
-// requestHandlerReturn.
+// dispatchReturn attempts to find and execute a requestReturnHandler for the given request returning an error if the
+// request has no registered requestReturnHandler. dispatch will bubble the result and error from the
+// requestReturnHandler.
 func (m *mediator) dispatchReturn(request interface{}, ctx context.Context) (interface{}, error) {
 	requestName := reflect.TypeOf(request).Name()
 

@@ -60,3 +60,8 @@ func main() {
 	fmt.Printf("Created book %+v", book)
 }
 ```
+
+## Issues
+This pattern suffers a major flaw with Go in its current state (pre-generics).
+
+The `requestHandler` and `requestReturnHandler` interfaces each take their respective requests as the first argument to their `Handle` method.  Without generics, I must write the type signature of `requestHandler` as `Handle(request interface{}, ctx context.Context) error` and `requestReturnHandler` as `Handle(request interface{}, ctx context.Context) (interface{}, error)`. This forces every handler to perform a type assertion to convert the `interface{}` into the type it expects.  This also means that `requestReturnHandler`'s return an `interface{}` which drastically decreases type safety and requires callers to perform another type assertion to convert the `interface{}` into the correct type.
